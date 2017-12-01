@@ -344,7 +344,7 @@ function printSuccessMessage()
 export LC_CTYPE=C
 export LANG=C
 
-DEBUG=1 # 1|0
+DEBUG=0
 _debug set -x
 VERSION="0.1.0"
 
