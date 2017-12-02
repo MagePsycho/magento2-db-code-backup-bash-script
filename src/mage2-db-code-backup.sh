@@ -179,7 +179,7 @@ Version $VERSION
         -v,     --version          Output version information and exit
 
     Examples:
-        $(basename "$0") --src-dir=... --dest-dir=... --type=all --skip-media=1
+        $(basename "$0") --type=all --skip-media=1 --src-dir=... --dest-dir=...
 
 "
     _printPoweredBy
