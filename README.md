@@ -7,7 +7,7 @@ You can either run the command manually or can automate it via cronjob.
 ## INSTALL
 You can simply download the script file and give the executable permission.
 ```
-curl -O mage2-backup.sh https://raw.githubusercontent.com/MagePsycho/magento2-db-code-backup-bash-script/master/src/mage2-db-code-backup.sh
+curl -0 https://raw.githubusercontent.com/MagePsycho/magento2-db-code-backup-bash-script/master/src/mage2-db-code-backup.sh -o mage2-backup.sh
 chmod +x mage2-backup.sh
 ```
 
