@@ -276,7 +276,7 @@ function prepareBackupName()
 {
     if [[ -z "$M2_BACKUP_NAME" ]]; then
         #MD5=`echo \`date\` $RANDOM | md5sum | cut -d ' ' -f 1`
-        DATETIME=$(date + "%Y-%m-%d-%H%-M%-%S")
+        DATETIME=$(date +"%Y-%m-%d-%H-%M-%S")
         M2_BACKUP_NAME="mage2-backup.$DATETIME"
     fi
 }
