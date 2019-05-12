@@ -256,7 +256,7 @@ function validateArgs()
         ERROR_COUNT=$((ERROR_COUNT + 1))
     fi
 
-    echo "$ERROR_COUNT"
+    #echo "$ERROR_COUNT"
     [[ "$ERROR_COUNT" -gt 0 ]] && exit 1
 }
 
@@ -295,6 +295,7 @@ function createDbBackup()
 {
     _success "Dumping MySQL..."
     local host username password dbName
+    # TODO FIX if there are multiple occurences
     host=$(grep host "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
     username=$(grep username "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
     password=$(grep password "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
