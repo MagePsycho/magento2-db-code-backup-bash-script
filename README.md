@@ -63,7 +63,7 @@ If you want to schedule via Cron, just add the following line in your Crontab en
 ![Mage2Backup Help](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-help-0.2.0.png "Mage2Backup Help")
 1. Mage2Backup Help
 
-![Mage2Backup in Action](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-help-0.2.0.png "Mage2Backup in Action")
+![Mage2Backup in Action](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-in-action-0.2.0.gif "Mage2Backup in Action")
 2. Mage2Backup in Action
 
 ## TO-DOS
