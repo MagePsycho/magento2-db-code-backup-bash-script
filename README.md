@@ -60,8 +60,11 @@ If you want to schedule via Cron, just add the following line in your Crontab en
 `0 0 * * *` expression means the command will run run at every midnight.
 
 ## Screenshots
-![Mage2Backup Help](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-help.png "Mage2Backup Help")
-1. Screentshot - Mage2Backup Help
+![Mage2Backup Help](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-help-0.2.0.png "Mage2Backup Help")
+1. Mage2Backup Help
+
+![Mage2Backup in Action](https://github.com/MagePsycho/magento2-db-code-backup-bash-script/raw/master/docs/mage2-backup-script-help-0.2.0.png "Mage2Backup in Action")
+2. Mage2Backup in Action
 
 ## TO-DOS
  - S3 support

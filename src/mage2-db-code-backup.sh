@@ -329,13 +329,7 @@ function createCodeBackup()
         EXCLUDES="${EXCLUDES}--exclude=${CURRENT_EXC_PATH} "
     done
 
-    tar -zcf "$WP_CODE_BACKUP_FILE" ${EXCLUDES} -C "${WP_SRC_DIR}"
-
-    if [[ "$M2_SKIP_MEDIA" == 1 ]]; then
-		tar -zcf "$M2_CODE_BACKUP_FILE" --exclude="./var" --exclude="./pub/media" --exclude="./pub/static" -C "${M2_SRC_DIR}" .
-	else
-		tar -zcf "$M2_CODE_BACKUP_FILE" --exclude="./var" --exclude="./pub/static" -C "${M2_SRC_DIR}" .
-	fi
+    tar -zcf "$M2_CODE_BACKUP_FILE" ${EXCLUDES} -C "${M2_SRC_DIR}" .
 	_success "Done!"
 }
 
@@ -345,13 +339,23 @@ function printSuccessMessage()
 
     echo "################################################################"
     echo ""
-    echo " >> Backup Type           : ${M2_BACKUP_TYPE}"
+    BACKUP_TYPES=()
+    if [[ "$M2_BACKUP_DB" -eq 1 ]]; then
+        BACKUP_TYPES+=('DB')
+    fi
+    if [[ "$M2_BACKUP_CODE" -eq 1 ]]; then
+        BACKUP_TYPES+=('Code')
+    fi
+
+    backupTypes=$( IFS=$','; echo "${BACKUP_TYPES[*]}" )
+    echo " >> Backup Type           : ${backupTypes}"
     echo " >> Backup Source         : ${M2_SRC_DIR}"
-    if [[ $M2_BACKUP_TYPE = @(db|database|all) ]]; then
+
+    if [[ "$M2_BACKUP_DB" -eq 1 ]]; then
         echo " >> Database Dump File    : ${M2_DB_BACKUP_FILE}"
     fi
 
-    if [[ $M2_BACKUP_TYPE = @(codebase|code|all) ]]; then
+    if [[ "$M2_BACKUP_CODE" -eq 1 ]]; then
         echo " >> Codebase Archive File : ${M2_CODE_BACKUP_FILE}"
     fi
 
