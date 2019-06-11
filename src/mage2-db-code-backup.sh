@@ -5,7 +5,7 @@
 #
 # @author   Raj KB <magepsycho@gmail.com>
 # @website  http://www.magepsycho.com
-# @version  0.1.0
+# @version  0.2.0
 
 # UnComment it if bash is lower than 4.x version
 shopt -s extglob
@@ -168,18 +168,15 @@ Version $VERSION
     Options:
         -sd,    --src-dir          Source directory (from where backup file will be created)
         -dd,    --dest-dir         Destination directory (to where the backup file will be moved)
-        -bt,    --type             Backup Type. Default: all
-                                   Options:
-                                   1. db (for database only)
-                                   2. code (for codebase only)
-                                   3. all (for database + codebase)
-        -sm,    --skip-media       Skip media folder from code backup.
-                                   Default: 1
+        -bd,	--backup-db		   Backup DB
+		-bc,	--backup-code	   Backup Code
+        -uc,	--use-mysql-config Use MySQL config file (~/.my.cnf)
+        -sm,    --skip-media       Skip media folder from code backup
         -h,     --help             Display this help and exit
         -v,     --version          Output version information and exit
 
     Examples:
-        $(basename "$0") --type=all --skip-media=1 --src-dir=... --dest-dir=...
+        $(basename "$0") --backup-db --backup-code --skip-media --src-dir=... --dest-dir=...
 
 "
     _printPoweredBy
@@ -192,8 +189,11 @@ function processArgs()
     for arg in "$@"
     do
         case $arg in
-            -bt=*|--type=*)
-                M2_BACKUP_TYPE="${arg#*=}"
+            -bd=*|--backup-db)
+                M2_BACKUP_DB=1
+            ;;
+            -bc=*|--backup-code)
+                M2_BACKUP_CODE=1
             ;;
             -sd=*|--src-dir=*)
                 M2_SRC_DIR="${arg#*=}"
@@ -201,8 +201,11 @@ function processArgs()
             -dd=*|--dest-dir=*)
                 M2_DEST_DIR="${arg#*=}"
             ;;
-            -sm=*|--skip-media=*)
-                M2_SKIP_MEDIA="${arg#*=}"
+            -uc|--use-mysql-config)
+                M2_USE_MYSQL_CONFIG=1
+            ;;
+            -sm|--skip-media)
+                M2_SKIP_MEDIA=1
             ;;
             -bn=*|--backup-name=*)
                 M2_BACKUP_NAME="${arg#*=}"
@@ -226,13 +229,8 @@ function processArgs()
 function validateArgs()
 {
     ERROR_COUNT=0
-    if [[ -z "$M2_BACKUP_TYPE" ]]; then
-        _error "Backup type parameter missing."
-        ERROR_COUNT=$((ERROR_COUNT + 1))
-    fi
-
-    if [[ ! -z "$M2_BACKUP_TYPE" && "$M2_BACKUP_TYPE" != @(db|code|all) ]]; then
-        _error "Backup type must be one of db|code|all."
+    if [[ -z "$M2_BACKUP_DB" && -z "$M2_BACKUP_CODE" ]]; then
+        _error "You should mention at least one of the backup types: --backup-db or --backup-code"
         ERROR_COUNT=$((ERROR_COUNT + 1))
     fi
 
@@ -302,13 +300,37 @@ function createDbBackup()
     dbName=$(grep dbname "${M2_SRC_DIR}/app/etc/env.php" |cut -d "'" -f 4)
 
     # @todo option to skip log tables
-	mysqldump -h "$host" -u "$username" -p"$password" "$dbName" | gzip > "$M2_DB_BACKUP_FILE"
+	if [[ "$M2_USE_MYSQL_CONFIG" -eq 1 ]]; then
+		mysqldump "$dbName" | gzip > "$M2_DB_BACKUP_FILE"
+	else
+		mysqldump -h "$host" -u "$username" -p"$password" "$dbName" | gzip > "$M2_DB_BACKUP_FILE"
+	fi
 	_success "Done!"
 }
 
 function createCodeBackup()
 {
     _success "Archiving Codebase..."
+
+    declare -a EXC_PATH
+    EXC_PATH[1]=./.git
+    EXC_PATH[2]=./var
+    EXC_PATH[3]=./pub/static
+    EXC_PATH[4]=./app/etc/env.php
+
+    if [[ "$M2_SKIP_MEDIA" == 1 ]]; then
+        EXC_PATH[5]=./pub/media
+    fi
+
+    EXCLUDES=''
+    for i in "${!EXC_PATH[@]}" ; do
+        CURRENT_EXC_PATH=${EXC_PATH[$i]}
+        # note the trailing space
+        EXCLUDES="${EXCLUDES}--exclude=${CURRENT_EXC_PATH} "
+    done
+
+    tar -zcf "$WP_CODE_BACKUP_FILE" ${EXCLUDES} -C "${WP_SRC_DIR}"
+
     if [[ "$M2_SKIP_MEDIA" == 1 ]]; then
 		tar -zcf "$M2_CODE_BACKUP_FILE" --exclude="./var" --exclude="./pub/media" --exclude="./pub/static" -C "${M2_SRC_DIR}" .
 	else
@@ -347,12 +369,14 @@ export LANG=C
 
 DEBUG=0
 _debug set -x
-VERSION="0.1.0"
+VERSION="0.2.0"
 
 M2_SRC_DIR=
 M2_DEST_DIR=
-M2_BACKUP_TYPE=all
-M2_SKIP_MEDIA=1
+M2_BACKUP_DB=0
+M2_BACKUP_CODE=0
+M2_USE_MYSQL_CONFIG=0
+M2_SKIP_MEDIA=0
 M2_BACKUP_NAME=
 M2_DB_BACKUP_FILE=
 M2_CODE_BACKUP_FILE=
@@ -367,11 +391,11 @@ function main()
     prepareCodebaseFilename
     prepareDatabaseFilename
 
-    if [[ "$M2_BACKUP_TYPE" = @(database|db|all) ]]; then
+    if [[ "$M2_BACKUP_DB" -eq 1 ]]; then
         createDbBackup
     fi
 
-    if [[ "$M2_BACKUP_TYPE" = @(codebase|code|all) ]]; then
+    if [[ "$M2_BACKUP_CODE" -eq 1 ]]; then
         createCodeBackup
     fi
 

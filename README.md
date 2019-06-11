@@ -24,23 +24,38 @@ sudo mv mage2-backup.sh /usr/local/bin/mage2-backup.sh
 
 ### To backup database only
 ```
-./mage2-backup.sh --type=db --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
+./mage2-backup.sh --backup-db --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
+```
+
+If you want to get rid of this message
+> Using a password on the command line interface can be insecure.
+
+You can create a `.my.cnf` file in home directory with the following config
+```
+[client]
+host=localhost
+user=[your-db-user]
+password=[your-db-pass]
+```
+And use option `--use-mysql-config` as
+```
+./mage2-backup.sh --backup-db --use-mysql-config --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
 ```
 
 ### To backup code only
 ```
-./mage2-backup.sh --type=code --skip-media=1 --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
+./mage2-backup.sh --backup-code --skip-media --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
 ```
 
 ### To backup code + database
 ```
-./mage2-backup.sh --type=all --skip-media=1 --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
+./mage2-backup.sh --backup-db --backup-code --skip-media --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
 ```
 
 ### To schedule backup via Cron
 If you want to schedule via Cron, just add the following line in your Crontab entry `crontab -e`
 ```
-0 0 * * * /path/to/mage2-backup.sh --type=all --skip-media=1 --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination > /dev/null 2>&1
+0 0 * * * /path/to/mage2-backup.sh --backup-db --backup-code --skip-media --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination > /dev/null 2>&1
 ```
 `0 0 * * *` expression means the command will run run at every midnight.
 
