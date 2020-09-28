@@ -135,13 +135,7 @@ function _checkRootUser()
 function _printPoweredBy()
 {
     local mp_ascii
-    mp_ascii='
-   __  ___              ___               __
-  /  |/  /__ ____ ____ / _ \___ __ ______/ /  ___
- / /|_/ / _ `/ _ `/ -_) ___(_-</ // / __/ _ \/ _ \
-/_/  /_/\_,_/\_, /\__/_/  /___/\_, /\__/_//_/\___/
-            /___/             /___/
-'
+    mp_ascii='MagePsycho'
     cat <<EOF
 ${_green}
 Powered By:
@@ -294,11 +288,13 @@ function createDbBackup()
     _success "Dumping MySQL..."
     local host username password dbName
     # TODO FIX if there are multiple occurences
-    host=$(grep host "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    username=$(grep username "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    password=$(grep password "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    dbName=$(grep dbname "${M2_SRC_DIR}/app/etc/env.php" |cut -d "'" -f 4)
-
+    host=$(grep host "${M2_SRC_DIR}/app/etc/env.php" | head -1 | cut -d "'" -f 4)
+    username=$(grep username "${M2_SRC_DIR}/app/etc/env.php" | head -1 |cut -d "'" -f 4)
+    password=$(grep password "${M2_SRC_DIR}/app/etc/env.php" | head -1 |cut -d "'" -f 4)
+    dbName=$(grep dbname "${M2_SRC_DIR}/app/etc/env.php" | head -1 |cut -d "'" -f 4)
+_success $username
+_success $dbName
+_success $host
     # @todo option to skip log tables
 	if [[ "$M2_USE_MYSQL_CONFIG" -eq 1 ]]; then
 		mysqldump "$dbName" | gzip > "$M2_DB_BACKUP_FILE"
