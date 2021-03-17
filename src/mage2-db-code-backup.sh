@@ -5,7 +5,7 @@
 #
 # @author   Raj KB <magepsycho@gmail.com>
 # @website  http://www.magepsycho.com
-# @version  0.2.0
+# @version  0.2.1
 
 # UnComment it if bash is lower than 4.x version
 shopt -s extglob
@@ -294,10 +294,10 @@ function createDbBackup()
     _success "Dumping MySQL..."
     local host username password dbName
     # TODO FIX if there are multiple occurences
-    host=$(grep host "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    username=$(grep username "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    password=$(grep password "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
-    dbName=$(grep dbname "${M2_SRC_DIR}/app/etc/env.php" |cut -d "'" -f 4)
+    host=$(grep -m 1 host "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
+    username=$(grep -m 1 username "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
+    password=$(grep -m 1 password "${M2_SRC_DIR}/app/etc/env.php" | cut -d "'" -f 4)
+    dbName=$(grep -m 1 dbname "${M2_SRC_DIR}/app/etc/env.php" |cut -d "'" -f 4)
 
     # @todo option to skip log tables
 	if [[ "$M2_USE_MYSQL_CONFIG" -eq 1 ]]; then
@@ -373,7 +373,7 @@ export LANG=C
 
 DEBUG=0
 _debug set -x
-VERSION="0.2.0"
+VERSION="0.2.1"
 
 M2_SRC_DIR=
 M2_DEST_DIR=
