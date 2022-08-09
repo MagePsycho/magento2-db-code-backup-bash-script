@@ -317,6 +317,7 @@ function createCodeBackup()
     EXC_PATH[2]=./var
     EXC_PATH[3]=./pub/static
     EXC_PATH[4]=./app/etc/env.php
+    EXC_PATH[5]=./generated
 
     if [[ "$M2_SKIP_MEDIA" == 1 ]]; then
         EXC_PATH[5]=./pub/media
