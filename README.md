@@ -52,6 +52,12 @@ And use option `--use-mysql-config` as
 ./mage2-backup.sh --backup-db --backup-code --skip-media --src-dir=/path/to/magento2/root --dest-dir=/path/to/destination
 ```
 
+**Notes**  
+If you want to use custom backup name, you can pass `--backup-name=...` option.   
+If this option is not used, the `mage2-backup.$DATETIME` will be used as a default basename for code & db backups.  
+*You can utilize this option if you want to automate the backup and download process*
+
+
 ### To schedule backup via Cron
 If you want to schedule via Cron, just add the following line in your Crontab entry `crontab -e`
 ```

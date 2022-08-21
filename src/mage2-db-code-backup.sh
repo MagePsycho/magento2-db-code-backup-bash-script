@@ -170,6 +170,7 @@ Version $VERSION
         -dd,    --dest-dir         Destination directory (to where the backup file will be moved)
         -bd,    --backup-db        Backup DB
         -bc,    --backup-code      Backup Code
+        -bn     --backup-name      Backup Name (Default: mage2-backup.$DATETIME)
         -uc,	--use-mysql-config Use MySQL config file (~/.my.cnf)
         -sm,    --skip-media       Skip media folder from code backup
         -h,     --help             Display this help and exit
