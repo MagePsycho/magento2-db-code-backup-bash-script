@@ -5,7 +5,7 @@
 #
 # @author   Raj KB <magepsycho@gmail.com>
 # @website  http://www.magepsycho.com
-# @version  0.2.1
+# @version  0.2.2
 
 # UnComment it if bash is lower than 4.x version
 shopt -s extglob
@@ -321,7 +321,7 @@ function createCodeBackup()
     EXC_PATH[5]=./generated
 
     if [[ "$M2_SKIP_MEDIA" == 1 ]]; then
-        EXC_PATH[5]=./pub/media
+        EXC_PATH[6]=./pub/media
     fi
 
     EXCLUDES=''
@@ -375,7 +375,7 @@ export LANG=C
 
 DEBUG=0
 _debug set -x
-VERSION="0.2.1"
+VERSION="0.2.2"
 
 M2_SRC_DIR=
 M2_DEST_DIR=
